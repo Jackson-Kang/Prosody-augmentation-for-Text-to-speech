@@ -5,8 +5,10 @@ import ffmpeg
 import sys
 
 
-def change_sampling_rate():
+# [TO DO]	rewrite metadata.csv to record metadata of augmented dataset
 
+
+def change_sampling_rate():
 
 	save_dir = create_dir(args.save_dir)
 	resampled_wav_dir = create_dir(save_dir, "resampled_wavs")
@@ -15,14 +17,11 @@ def change_sampling_rate():
 	resampled_dataset_paths = [ create_dir(get_path(resampled_wav_dir, dataset_name)) for dataset_name in dataset_name_list ]	
 
 	all_in_wav_paths = [get_speech_path(path) for path in args.wav_paths]
-	all_out_wav_paths = [list(map( lambda path: get_path(resampled_dataset_paths[idx], path.split("/")[-1]), wav_paths )) for idx, wav_paths in enumerate(all_in_wav_paths)]	
-	
-
+	all_out_wav_paths = [list(map( lambda path: get_path(resampled_dataset_paths[idx], path.split("/")[-1]), wav_paths )) for idx, wav_paths in enumerate(all_in_wav_paths)]		
 
 	for idx, in_wav_paths in enumerate(all_in_wav_paths):
 
-		print("\t[LOG] {} / {} processed...".format(idx, len(all_in_wav_paths)))
-
+		print("\n\t[LOG] {} / {} processed...".format(idx+1, len(all_in_wav_paths)))
 		do_multiprocessing(resample_wav, list(zip(in_wav_paths, all_out_wav_paths[idx], [args.sampling_rate for _ in range(len(in_wav_paths))])), num_jobs=args.num_jobs)	
 
 
@@ -30,6 +29,7 @@ def change_sampling_rate():
 
 
 def augment_data():
+	# [TO DO] apply techniques refering link: https://www.kaggle.com/huseinzol05/sound-augmentation-librosa
 	pass
 
 
