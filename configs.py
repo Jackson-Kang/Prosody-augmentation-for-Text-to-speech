@@ -1,5 +1,5 @@
 
-from utils import get_path
+import os
 
 class Arguments():
 	
@@ -10,7 +10,7 @@ class Arguments():
 
 	# save dir configurations
 	save_dir = "preprocessed"
-	savepath_to_resampled_wavs = get_path(save_dir, "resampled_wavs") 
+	savepath_to_resampled_wavs = os.path.join(save_dir, "resampled_wavs") 
 
 
 	# audio(wav) configurations

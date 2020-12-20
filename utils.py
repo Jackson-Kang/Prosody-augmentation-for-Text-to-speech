@@ -1,8 +1,14 @@
 from multiprocessing import Pool
 from tqdm import tqdm
+from configs import Arguments as args
+
+from scipy.io.wavfile import read
 
 import os, glob
 import ffmpeg
+
+
+p = Pool(args.num_jobs)
 
 def get_path(*args):
 	return os.path.join('', *args)
@@ -13,9 +19,8 @@ def create_dir(*args):
 		os.mkdir(path)
 	return path
 
-def get_speech_path(root_dir):
-	paths = glob.glob(get_path(root_dir, "**/*.wav"), recursive=True)
-	return paths
+def get_speech_path(root_dir, file_extension=".wav"):
+	return glob.glob(get_path(root_dir, "**/*{}".format(file_extension)), recursive=True)
 
 def resample_wav(wav_names):
 	in_wav_name, out_wav_name, sampling_rate  = wav_names
@@ -31,12 +36,18 @@ def resample_wav(wav_names):
 			raise
 
 
-def save_wav(savepath):
+def read_wav(path, args_sampling_rate):
+	sampling_rate, audio = read(path)
+
+	assert args_sampling_rate != sampling_rate, "[ERROR] args.sampling_rate({}) is different from audio sampling rate({}).".format(args_sampling_rate, sampling_rate)
+
+	return audio
+
+def write_wav(savepath):
 	pass
 
 
-def do_multiprocessing(job, tasklist, num_jobs=8):
-	p = Pool(num_jobs)
+def do_multiprocessing(job, tasklist):
 	with tqdm(total=len(tasklist)) as pbar:
 		for _ in tqdm(p.imap_unordered(job, tasklist)):
 			pbar.update()	
