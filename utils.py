@@ -2,7 +2,7 @@ from multiprocessing import Pool
 from tqdm import tqdm
 from configs import Arguments as args
 
-from scipy.io.wavfile import read
+from scipy.io.wavfile import read, write
 
 import os, glob
 import ffmpeg
@@ -38,16 +38,15 @@ def resample_wav(wav_names):
 
 def read_wav(path, args_sampling_rate):
 	sampling_rate, audio = read(path)
-
-	assert args_sampling_rate != sampling_rate, "[ERROR] args.sampling_rate({}) is different from audio sampling rate({}).".format(args_sampling_rate, sampling_rate)
-
+	assert args_sampling_rate == sampling_rate, "[ERROR] args.sampling_rate({}) is different from audio sampling rate({}).".format(args_sampling_rate, sampling_rate)
 	return audio
 
-def write_wav(savepath):
-	pass
+def write_wav(savepath, audio, sampling_rate):
+	write(savepath, sampling_rate, audio)
 
 
-def do_multiprocessing(job, tasklist):
+def do_multiprocessing(job, tasklist, num_jobs):
+	p = Pool(num_jobs)
 	with tqdm(total=len(tasklist)) as pbar:
 		for _ in tqdm(p.imap_unordered(job, tasklist)):
 			pbar.update()	

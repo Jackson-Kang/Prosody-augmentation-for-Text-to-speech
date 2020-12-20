@@ -25,21 +25,21 @@ def change_sampling_rate():
 	for idx, in_wav_paths in enumerate(all_in_wav_paths):
 
 		print("\n\t[LOG] {} / {} processed...".format(idx+1, len(all_in_wav_paths)))
-		do_multiprocessing(resample_wav, list(zip(in_wav_paths, all_out_wav_paths[idx], [args.sampling_rate for _ in range(len(in_wav_paths))])))
+		do_multiprocessing(resample_wav, list(zip(in_wav_paths, all_out_wav_paths[idx], [args.sampling_rate for _ in range(len(in_wav_paths))])), args.num_jobs)
 
+def augment_f(path):
+	in_wav_path, out_wav_path = path	
+	audio = read_wav(in_wav_path, args.sampling_rate)
+
+	for _ in range(args.augment_repeat_numb):	
+		augmented_audios = [	pitch_augment(audio, args.sampling_rate), 
+					speed_augment(audio, low=0.5, high=1.8),
+					pitch_and_speed_augment(audio, low=0.5, high=1.8)]
+		out_wav_paths = [ out_wav_path.replace(".wav", "") + postfix + str(augmented_audios[idx][1]) + ".wav" for idx, postfix in enumerate(("_pitch_", "_speed_", "_pitch_and_speed_"))]
+		[write_wav(out_wav_paths[idx], audio[0], args.sampling_rate) for idx, audio in enumerate(augmented_audios)]
+	
 def augment_data():
 
-	def job(path):
-	
-		in_wav_path, out_wav_path = path	
-		audio = read_wav(in_wav_path, args.sampling_rate)
-
-		for _ in range(args.augment_repeat_numb):	
-			augmented_audios = [	pitch_augment(audio, bins_per_octave, pitch_pm), 
-						speed_augment(audio, low=0.5, high=1.8),
-						pitch_and_speed_augment(audio, low=0.5, high=1.8)]
-			out_wav_paths = [ out_wav_path.replace(".wav", "") + postfix + augmented_audios[idx][1] + ".wav" for idx, postfix in enumerate(("_pitch_", "_speed_", "_pitch_and_speed_"))]
-			[save_wav(out_wav_paths[idx], audio[0]) for idx, audio in enumerate(augmented_audios)]
 	save_dir = create_dir(args.save_dir)
 	augmented_wav_dir = create_dir(save_dir, "augmented_wavs")
 	dataset_name_list = [ wav_path.split("/")[-1] for wav_path in args.wav_paths ]
@@ -50,8 +50,8 @@ def augment_data():
 
 	for idx, in_wav_paths in enumerate(all_in_wav_paths):
 		print("\n\t[LOG] {} / {} processed...".format(idx+1, len(all_in_wav_paths)))
-		do_multiprocessing(job, list(zip(in_wav_paths, all_out_wav_paths[idx])))
-
+		print(len(list(zip(in_wav_paths, all_out_wav_paths[idx]))))
+		do_multiprocessing(augment_f, list(zip(in_wav_paths, all_out_wav_paths[idx])), args.num_jobs)
 
 if __name__ == "__main__":
 

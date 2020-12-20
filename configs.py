@@ -11,7 +11,7 @@ class Arguments():
 	# save dir configurations
 	save_dir = "preprocessed"
 	savepath_to_resampled_wavs = os.path.join(save_dir, "resampled_wavs") 
-
+	augment_repeat_numb = 10
 
 	# audio(wav) configurations
 	sampling_rate = 22050	# target sampling rate

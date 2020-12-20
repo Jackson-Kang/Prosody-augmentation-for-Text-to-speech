@@ -1,6 +1,7 @@
 import librosa
+import numpy as np
 
-def picth_augment(audio, bins_per_octave=12, pitch_pm=2):
+def pitch_augment(audio, sample_rate, bins_per_octave=12, pitch_pm=2):
 	y_pitch = audio.copy()
 	pitch_change =  pitch_pm * 2*(np.random.uniform())   
 	y_pitch = librosa.effects.pitch_shift(	y_pitch.astype('float64'), 
