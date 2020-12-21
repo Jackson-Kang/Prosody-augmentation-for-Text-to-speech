@@ -14,8 +14,10 @@ Other prosody augmentation method will be added later.
 Install dependencies via following command:
 ```
 # python 3.7
+
 # install ffmpeg
 sudo apt-get install ffmpeg
+
 # install python packages
 pip install -r requirements.txt
 ```
