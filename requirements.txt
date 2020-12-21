@@ -1,3 +1,5 @@
+ffmpeg-python==0.2.0
 numpy==1.19.4
 scipy==1.5.4
 librosa==0.8.0
+tqdm==4.54.1

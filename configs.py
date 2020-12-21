@@ -11,11 +11,11 @@ class Arguments():
 	# save dir configurations
 	save_dir = "preprocessed"
 	savepath_to_resampled_wavs = os.path.join(save_dir, "resampled_wavs") 
-	augment_repeat_numb = 10
+	augment_repeat_numb = 3		# the number of augementation per one utterance.
 
 	# audio(wav) configurations
 	sampling_rate = 22050	# target sampling rate
 
 
 	# # of threads
-	num_jobs = 10
+	num_jobs = 10		# how many thread will you use
