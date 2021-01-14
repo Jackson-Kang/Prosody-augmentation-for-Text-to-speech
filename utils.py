@@ -44,11 +44,8 @@ def read_wav(path, args_sampling_rate):
 
 def write_wav(savepath, audio, sampling_rate, max_wav_value = 32768.0):
 	audio = audio / np.max(np.abs(audio), axis=0)
-	#print(audio[:10])
 	audio = audio * max_wav_value
-	#print(audio[:10])
 	audio = np.clip(audio, -max_wav_value, max_wav_value -1).astype(np.int16)
-	print(audio[:10])
 	write(savepath, sampling_rate, audio)
 
 
