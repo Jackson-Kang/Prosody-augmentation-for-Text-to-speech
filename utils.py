@@ -3,6 +3,7 @@ from tqdm import tqdm
 from configs import Arguments as args
 
 from scipy.io.wavfile import read, write
+import numpy as np
 
 import os, glob
 import ffmpeg
@@ -41,7 +42,13 @@ def read_wav(path, args_sampling_rate):
 	assert args_sampling_rate == sampling_rate, "[ERROR] args.sampling_rate({}) is different from audio sampling rate({}).".format(args_sampling_rate, sampling_rate)
 	return audio
 
-def write_wav(savepath, audio, sampling_rate):
+def write_wav(savepath, audio, sampling_rate, max_wav_value = 32768.0):
+	audio = audio / np.max(np.abs(audio), axis=0)
+	#print(audio[:10])
+	audio = audio * max_wav_value
+	#print(audio[:10])
+	audio = np.clip(audio, -max_wav_value, max_wav_value -1).astype(np.int16)
+	print(audio[:10])
 	write(savepath, sampling_rate, audio)
 
 
