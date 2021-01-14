@@ -15,7 +15,7 @@ class Arguments():
 
 	# audio(wav) configurations
 	sampling_rate = 22050	# target sampling rate
-
+	max_wav_value = 32768.0
 
 	# # of threads
 	num_jobs = 10		# how many thread will you use

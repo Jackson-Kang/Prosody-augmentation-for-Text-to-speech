@@ -36,7 +36,7 @@ def augment_f(path):
 					speed_augment(audio, low=0.5, high=1.8),
 					pitch_and_speed_augment(audio, low=0.5, high=1.8)]
 		out_wav_paths = [ out_wav_path.replace(".wav", "") + postfix + str(augmented_audios[idx][1]) + ".wav" for idx, postfix in enumerate(("_pitch_", "_speed_", "_pitch_and_speed_"))]
-		[write_wav(out_wav_paths[idx], audio[0], args.sampling_rate) for idx, audio in enumerate(augmented_audios)]
+		[write_wav(out_wav_paths[idx], audio[0], args.sampling_rate, args.max_wav_value) for idx, audio in enumerate(augmented_audios)]
 	
 def augment_data():
 
